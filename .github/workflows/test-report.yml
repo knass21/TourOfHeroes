@@ -13,7 +13,7 @@ jobs:
         artifact: dotnet-results            # artifact name
         name: MS Tests                  # Name of the check run which will be created
         path: '*.trx'                     # Path to test results (inside artifact .zip)
-        reporter: dotnet-junit              # Format of test results
+        reporter: dotnet-trx              # Format of test results
 
 
 
