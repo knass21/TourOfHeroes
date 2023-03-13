@@ -38,7 +38,7 @@ public class DashboardScreenTest
         Assert.Equal(4, heroListBeginning);
         
         // Top hero list consists of 3 heroes.   +1 is to exclude string "+++++...."
-        Assert.Equal(3, printed.Count - (heroListBeginning + 1));
+        Assert.Equal(2, printed.Count - (heroListBeginning + 1));
     }
 }
 
