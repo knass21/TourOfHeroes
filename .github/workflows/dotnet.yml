@@ -35,7 +35,7 @@ jobs:
           test-results/**/*.trx
     - name: output results
       if: always()
-      run: echo ${{ fromJSON( steps.test-results.outputs.json ).formatted }}
+      run: echo ${{ toJSON(fromJSON( steps.test-results.outputs.json ).formatted) }}
     - name: Set badge color
       if: always()
       shell: bash
