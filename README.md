@@ -1,3 +1,4 @@
 # TourOfHeroes
 
-https://gist.githubusercontent.com/%7Buser%7D/%7Bid%7D/raw/badge.svg
+
+[![Test Results](https://gist.githubusercontent.com/knass21/1/raw/badge.svg)](https://gist.githubusercontent.com/knass21/1/raw/badge.svg)
