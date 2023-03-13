@@ -24,22 +24,6 @@ jobs:
     - name: Test with dotnet
       run: dotnet test --logger trx --results-directory "test-results"
     
-    
-    # - name: Upload dotnet test results
-    #   uses: actions/upload-artifact@v3
-    #   with:
-    #     name: dotnet-results
-    #     path: test-results
-    #   # Use always() to always run this step to publish test results when there are test failures
-    #   if: ${{ always() }}
-    # - uses: dorny/test-reporter@v1.6.0
-    #   with:
-    #     artifact: dotnet-results          # artifact name
-    #     name: MS Tests                    # Name of the check run which will be created
-    #     path: '*.trx'                     # Path to test results (inside artifact .zip)
-    #     reporter: dotnet-trx              # Format of test results
-
-
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       id: test-results
@@ -48,7 +32,6 @@ jobs:
         files: |
           test-results/**/*.xml
           test-results/**/*.trx
-
     - name: Set badge color
       if: always()
       shell: bash
