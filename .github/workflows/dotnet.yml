@@ -21,15 +21,67 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    # - name: Test with dotnet
-    #   run: dotnet test --logger trx --results-directory "TestResults"
+    - name: Test with dotnet
+      run: dotnet test --logger trx --results-directory "test-results"
+    
+    
     # - name: Upload dotnet test results
     #   uses: actions/upload-artifact@v3
     #   with:
     #     name: dotnet-results
-    #     path: TestResults
+    #     path: test-results
     #   # Use always() to always run this step to publish test results when there are test failures
     #   if: ${{ always() }}
+    # - uses: dorny/test-reporter@v1.6.0
+    #   with:
+    #     artifact: dotnet-results          # artifact name
+    #     name: MS Tests                    # Name of the check run which will be created
+    #     path: '*.trx'                     # Path to test results (inside artifact .zip)
+    #     reporter: dotnet-trx              # Format of test results
+
+
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      id: test-results
+      if: always()
+      with:
+        files: "test-results/**/*.xml"
+        files: "test-results/**/*.trx"
+
+    - name: Set badge color
+      shell: bash
+      run: |
+        case ${{ fromJSON( steps.test-results.outputs.json ).conclusion }} in
+          success)
+            echo "BADGE_COLOR=31c653" >> $GITHUB_ENV
+            ;;
+          failure)
+            echo "BADGE_COLOR=800000" >> $GITHUB_ENV
+            ;;
+          neutral)
+            echo "BADGE_COLOR=696969" >> $GITHUB_ENV
+            ;;
+        esac
+
+    - name: Create badge
+      uses: emibcn/badge-action@d6f51ff11b5c3382b3b88689ae2d6db22d9737d1
+      with:
+        label: Tests
+        status: '${{ fromJSON( steps.test-results.outputs.json ).formatted.stats.tests }} tests, ${{ fromJSON( steps.test-results.outputs.json ).formatted.stats.runs }} runs: ${{ fromJSON( steps.test-results.outputs.json ).conclusion }}'
+        color: ${{ env.BADGE_COLOR }}
+        path: badge.svg
+
+    - name: Upload badge to Gist
+      # Upload only for main branch
+      if: >
+        github.event_name == 'workflow_run' && github.event.workflow_run.head_branch == 'main' ||
+        github.event_name != 'workflow_run' && github.ref == 'refs/heads/main'
+      uses: andymckay/append-gist-action@1fbfbbce708a39bd45846f0955ed5521f2099c6d
+      with:
+        token: ${{ secrets.GIST_TOKEN }}
+        gistURL: https://gist.githubusercontent.com/{user}/{id}
+        file: badge.svg
+
     # - name: Create files for report
     #   run: 
     #     echo "title=Test Run ${{github.run_number}}" >> $GITHUB_ENV
@@ -44,3 +96,17 @@ jobs:
     #     name: 'Test Run'
     #     path: ${{github.workspace}}/${{env.file_name}}
     
+
+
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag ${{secrets.DOCKERHUB_USERNAME}}/toh
+    - name: Docker Login
+      uses: docker/login-action@v2.1.0
+      with:
+        # Username used to log against the Docker registry
+        username: ${{secrets.DOCKERHUB_USERNAME}}
+        # Password or personal access token used to log against the Docker registry
+        password: ${{secrets.DOCKERHUB_PASSWORD}}
+    - name: Publish to dockerhub
+      run: docker push ${{secrets.DOCKERHUB_USERNAME}}/toh
