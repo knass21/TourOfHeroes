@@ -19,4 +19,4 @@ jobs:
         # Password or personal access token used to log against the Docker registry
         password: ${{secrets.DOCKERHUB_PASSWORD}}
     - name: Publish to dockerhub
-      run: docker push ${{secrets.DOCKERHUB_USERNAME}}/TOH
+      run: docker push ${{secrets.DOCKERHUB_USERNAME}}/toh
