@@ -1,6 +1,6 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-name: .NET
+name: CI
 
 on:
   push:
@@ -32,10 +32,3 @@ jobs:
         path: TestResults
       # Use always() to always run this step to publish test results when there are test failures
       if: ${{ always() }}
-    - name: Test Reporter
-      uses: dorny/test-reporter@v1.6.0
-      if: success() || failure()    # run this step even if previous step failed
-      with:
-        name: MS Tests            # Name of the check run which will be created
-        path: TestResults/*.trx    # Path to test results
-        reporter: dotnet-trx        # Format of test results
