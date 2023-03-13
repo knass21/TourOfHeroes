@@ -34,7 +34,7 @@ jobs:
           test-results/**/*.xml
           test-results/**/*.trx
     - name: output results
-      run: echo steps.test-results.outputs.json
+      run: cat steps.test-results.outputs.json
     - name: Set badge color
       if: always()
       shell: bash
