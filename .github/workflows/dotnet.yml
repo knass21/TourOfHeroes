@@ -27,7 +27,7 @@ jobs:
 
         # build project
       - name: Build
-        run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true
+        run: dotnet build --no-restore --configuration $config /p:ContinuousIntegrationBuild=true
 
       - name: set pr build number (if pr)
         id: PRNUMBER
