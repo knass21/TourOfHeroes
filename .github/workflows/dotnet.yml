@@ -70,55 +70,55 @@ jobs:
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
 
-      - name: Test
-        run: dotnet test --no-restore --no-build --configuration $config --logger trx --results-directory "test-results" --no-build --verbosity normal
+      # - name: Test
+      #   run: dotnet test --no-restore --no-build --configuration $config --logger trx --results-directory "test-results" --no-build --verbosity normal
       
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        id: test-results
-        if: always()
-        with:
-          report_individual_runs: "true"
-          check_run_annotations: all tests, skipped tests
-          files: |
-            test-results/**/*.xml
-            test-results/**/*.trx
+      # - name: Publish Test Results
+      #   uses: EnricoMi/publish-unit-test-result-action@v2
+      #   id: test-results
+      #   if: always()
+      #   with:
+      #     report_individual_runs: "true"
+      #     check_run_annotations: all tests, skipped tests
+      #     files: |
+      #       test-results/**/*.xml
+      #       test-results/**/*.trx
       # - name: output results
       #   if: always()
       #   run: ${{ toJSON(fromJSON( steps.test-results.outputs.json ).formatted) }}
-      - name: Set badge color
-        if: always()
-        shell: bash
-        run: |
-          case ${{ fromJSON( steps.test-results.outputs.json ).conclusion }} in
-            success)
-              echo "BADGE_COLOR=31c653" >> $GITHUB_ENV
-              ;;
-            failure)
-              echo "BADGE_COLOR=800000" >> $GITHUB_ENV
-              ;;
-            neutral)
-              echo "BADGE_COLOR=696969" >> $GITHUB_ENV
-              ;;
-          esac
+      # - name: Set badge color
+      #   if: always()
+      #   shell: bash
+      #   run: |
+      #     case ${{ fromJSON( steps.test-results.outputs.json ).conclusion }} in
+      #       success)
+      #         echo "BADGE_COLOR=31c653" >> $GITHUB_ENV
+      #         ;;
+      #       failure)
+      #         echo "BADGE_COLOR=800000" >> $GITHUB_ENV
+      #         ;;
+      #       neutral)
+      #         echo "BADGE_COLOR=696969" >> $GITHUB_ENV
+      #         ;;
+      #     esac
 
-      - name: Create badge
-        if: always()
-        uses: emibcn/badge-action@d6f51ff11b5c3382b3b88689ae2d6db22d9737d1
-        with:
-          label: Tests
-          status: '${{ fromJSON( steps.test-results.outputs.json ).formatted.stats.tests }} tests, ${{ fromJSON( steps.test-results.outputs.json ).formatted.stats.runs_succ }} success, ${{ fromJSON( steps.test-results.outputs.json ).formatted.stats.runs_skip }} skipped, ${{ fromJSON( steps.test-results.outputs.json ).formatted.stats.runs_fail }} failed: ${{ fromJSON( steps.test-results.outputs.json ).conclusion }}'
-          color: ${{ env.BADGE_COLOR }}
-          path: badge.svg
+      # - name: Create badge
+      #   if: always()
+      #   uses: emibcn/badge-action@d6f51ff11b5c3382b3b88689ae2d6db22d9737d1
+      #   with:
+      #     label: Tests
+      #     status: '${{ fromJSON( steps.test-results.outputs.json ).formatted.stats.tests }} tests, ${{ fromJSON( steps.test-results.outputs.json ).formatted.stats.runs_succ }} success, ${{ fromJSON( steps.test-results.outputs.json ).formatted.stats.runs_skip }} skipped, ${{ fromJSON( steps.test-results.outputs.json ).formatted.stats.runs_fail }} failed: ${{ fromJSON( steps.test-results.outputs.json ).conclusion }}'
+      #     color: ${{ env.BADGE_COLOR }}
+      #     path: badge.svg
 
-      - name: Upload badge to Gist
-        if: always()
-        # Upload only for main branch
-        # if: >
-        #   github.event_name == 'workflow_run' && github.event.workflow_run.head_branch == 'main' ||
-        #   github.event_name != 'workflow_run' && github.ref == 'refs/heads/main'
-        uses: andymckay/append-gist-action@1fbfbbce708a39bd45846f0955ed5521f2099c6d
-        with:
-          token: ${{ secrets.GIST_TOKEN }}
-          gistURL: https://gist.githubusercontent.com/knass21/6faebd49908bce930bf0efe6af3b4433
-          file: badge.svg
+      # - name: Upload badge to Gist
+      #   if: always()
+      #   # Upload only for main branch
+      #   # if: >
+      #   #   github.event_name == 'workflow_run' && github.event.workflow_run.head_branch == 'main' ||
+      #   #   github.event_name != 'workflow_run' && github.ref == 'refs/heads/main'
+      #   uses: andymckay/append-gist-action@1fbfbbce708a39bd45846f0955ed5521f2099c6d
+      #   with:
+      #     token: ${{ secrets.GIST_TOKEN }}
+      #     gistURL: https://gist.githubusercontent.com/knass21/6faebd49908bce930bf0efe6af3b4433
+      #     file: badge.svg
