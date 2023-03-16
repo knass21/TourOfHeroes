@@ -22,7 +22,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true
     - name: Test
-      run: dotnet test --logger trx --results-directory "test-results" --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+      run: dotnet test --logger trx --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
     
     - name: Codecov
       uses: codecov/codecov-action@v1
@@ -34,8 +34,8 @@ jobs:
       with:
         report_individual_runs: "true"
         files: |
-          test-results/**/*.xml
-          test-results/**/*.trx
+          *.xml
+          *.trx
     # - name: output results
     #   if: always()
     #   run: ${{ toJSON(fromJSON( steps.test-results.outputs.json ).formatted) }}
