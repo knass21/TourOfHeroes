@@ -70,6 +70,15 @@ jobs:
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
 
+
+      - name: Run .NET Code Analysis
+        uses: dotnet/code-analysis@v1
+        id: code-analysis
+        with:
+          solution: TOH.sln
+          build-breaking: true
+          all-categories: all
+
       # - name: Test
       #   run: dotnet test --no-restore --no-build --configuration $config --logger trx --results-directory "test-results" --no-build --verbosity normal
       
