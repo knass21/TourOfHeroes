@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     env:
       config: "Release"
 
@@ -70,14 +70,6 @@ jobs:
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
 
-
-      - name: Run .NET Code Analysis
-        uses: dotnet/code-analysis@v2
-        id: code-analysis
-        with:
-          solution: TOH.sln
-          build-breaking: true
-          all-categories: all
 
       # - name: Test
       #   run: dotnet test --no-restore --no-build --configuration $config --logger trx --results-directory "test-results" --no-build --verbosity normal
