@@ -72,7 +72,7 @@ jobs:
 
 
       - name: Run .NET Code Analysis
-        uses: dotnet/code-analysis
+        uses: dotnet/code-analysis@v2
         id: code-analysis
         with:
           solution: TOH.sln
