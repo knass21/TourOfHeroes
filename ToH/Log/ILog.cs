@@ -2,8 +2,8 @@ namespace ToH.Log;
 
 public interface ILog
 {
-    void Debug(string line);
-    void Info(string line);
-    void Warn(string line);
-    void Error(string line);
+    void LogDebug(string line);
+    void LogInfo(string line);
+    void LogWarn(string line);
+    void LogError(string line);
 }

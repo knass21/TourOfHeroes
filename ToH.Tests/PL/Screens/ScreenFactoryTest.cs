@@ -10,11 +10,11 @@ namespace ToH.Tests.Screens;
 
 public class ScreenFactoryTest
 {
-    private ScreenFactory _uut;
-    private Mock<IPrinter> _printer;
-    private Mock<IHeroesController> _heroesController;
-    private Mock<ILog> _log;
-    private Mock<ISessionController> _sessionController;
+    private readonly ScreenFactory _uut;
+    private readonly Mock<IPrinter> _printer;
+    private readonly Mock<IHeroesController> _heroesController;
+    private readonly Mock<ILog> _log;
+    private readonly Mock<ISessionController> _sessionController;
 
     public ScreenFactoryTest()
     {
@@ -64,10 +64,10 @@ public class ScreenFactoryTest
         };
         
         // Act
-        HeroScreen screen = (HeroScreen) _uut.CreateScreen(typeof(HeroScreen), hero);
+        HeroScreen? screen = _uut.CreateScreen(typeof(HeroScreen), hero) as HeroScreen;
 
         // Assert
-        Assert.Equal(hero, screen.Hero);
+        Assert.Equal(hero, screen?.Hero);
     }
     
     [Fact]
@@ -87,11 +87,11 @@ public class ScreenFactoryTest
         };
         
         // Act
-        var screen = (HeroScreen) _uut.CreateScreen(typeof(HeroScreen), hero2);
+        var screen = _uut.CreateScreen(typeof(HeroScreen), hero2) as HeroScreen;
 
 
         // Assert
-        Assert.Equal(hero2, screen.Hero);
+        Assert.Equal(hero2, screen?.Hero);
     }
 
     [Fact]

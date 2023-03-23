@@ -6,7 +6,7 @@ namespace ToH.Tests.Integration
     internal class ListPrinter : IPrinter
     {
 
-        private List<string> _lines;
+        private readonly List<string> _lines;
 
         public ListPrinter()
         {

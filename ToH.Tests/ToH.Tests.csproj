@@ -30,4 +30,7 @@
       <ProjectReference Include="..\ToH\ToH.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EditorConfigFiles Remove="C:\Users\Kasper\Desktop\SWD\TourOfHeroes\ToH.Tests\.editorconfig" />
+    </ItemGroup>
 </Project>

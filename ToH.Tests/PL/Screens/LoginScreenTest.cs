@@ -11,13 +11,13 @@ namespace ToH.Tests.Screens;
 
 public class LoginScreenTest
 {
-    private Mock<IPrinter> _printer;
-    private Mock<ILog> _log;
-    private LoginScreen _uut;
-    private Mock<IUi> _ui;
-    private DashboardScreen _dashboardScreen;
-    private Mock<IScreenFactory> _factory;
-    private Mock<ISessionController> _controller;
+    private readonly Mock<IPrinter> _printer;
+    private readonly Mock<ILog> _log;
+    private readonly LoginScreen _uut;
+    private readonly Mock<IUi> _ui;
+    private readonly DashboardScreen _dashboardScreen;
+    private readonly Mock<IScreenFactory> _factory;
+    private readonly Mock<ISessionController> _controller;
 
     public LoginScreenTest()
     {
@@ -59,7 +59,7 @@ public class LoginScreenTest
         _uut.Text(_ui.Object, "TestUsername");
         
         // Assert
-        _ui.VerifySet(ui => ui.Screen = It.Is<DashboardScreen>(screen => screen == _dashboardScreen));
+        _ui.VerifySet(ui => ui.SetScreen(It.Is<DashboardScreen>(screen => screen == _dashboardScreen)));
     }
 
     [Fact]
@@ -82,6 +82,6 @@ public class LoginScreenTest
         _uut.Text(_ui.Object, "");
         
         // Assert
-        _ui.VerifySet(ui => ui.Screen = It.Is<LoginScreen>(screen => screen == _uut), Times.Never());
+        _ui.VerifySet(ui => ui.SetScreen(It.Is<LoginScreen>(screen => screen == _uut)), Times.Never());
     }
 }

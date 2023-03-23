@@ -11,9 +11,9 @@ namespace ToH.Tests.Screens;
 
 public class HeroScreenTest
 {
-    private Mock<IPrinter> _printer;
-    private Mock<ILog> _log;
-    private HeroScreen _uut;
+    private readonly Mock<IPrinter> _printer;
+    private readonly Mock<ILog> _log;
+    private readonly HeroScreen _uut;
 
     public HeroScreenTest()
     {
@@ -72,6 +72,6 @@ public class HeroScreenTest
         _uut.Escape(ui.Object);
         
         // Arrange
-        ui.VerifySet(ui => ui.Screen = It.Is<HeroesListScreen>(hs => hs == heroesListScreen));
+        ui.VerifySet(ui => ui.SetScreen(It.Is<HeroesListScreen>(hs => hs == heroesListScreen)));
     }
 }

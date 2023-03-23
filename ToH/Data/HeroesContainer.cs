@@ -2,7 +2,7 @@ namespace ToH.Data;
 
 public class HeroesContainer : IDatabase
 {
-    private List<Hero> _heroes;
+    private readonly List<Hero> _heroes;
 
     public HeroesContainer()
     {

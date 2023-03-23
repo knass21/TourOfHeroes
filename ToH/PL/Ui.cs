@@ -11,20 +11,21 @@ public class Ui : IUi, IObserver
     private readonly ILog _log;
     private Screen? _screen;
 
-    public Screen? Screen
+    private Screen? GetScreen()
     {
-        private get => _screen;
-        set
-        {
-            _screen = value;
-            _screen?.Init();
-        }
+        return _screen;
+    }
+
+    public void SetScreen(Screen? value)
+    {
+        _screen = value;
+        _screen?.Init();
     }
     public IScreenFactory ScreenFactory { get; }
 
     public Ui(Controller controller, Screen? screen, ILog log, IScreenFactory screenFactory)
     {
-        Screen = screen;
+        SetScreen(screen);
         ScreenFactory = screenFactory;
         _controller = controller;
         _log = log;
@@ -36,25 +37,25 @@ public class Ui : IUi, IObserver
         switch (_controller.Action)
         {
             case Action.None:
-                Screen?.None(this);
+                GetScreen()?.None(this);
                 break;
             case Action.Down:
-                Screen?.Down(this);
+                GetScreen()?.Down(this);
                 break;
             case Action.Up:
-                Screen?.Up(this);
+                GetScreen()?.Up(this);
                 break;
             case Action.Enter:
-                Screen?.Enter(this);
+                GetScreen()?.Enter(this);
                 break;
             case Action.Escape:
-                Screen?.Escape(this);
+                GetScreen()?.Escape(this);
                 break;
             case Action.Text:
-                Screen?.Text(this, _controller.value!);
+                GetScreen()?.Text(this, _controller.Value!);
                 break;
             default:
-                _log.Error($"Unhandled action: {_controller.Action}");
+                _log.LogError($"Unhandled action: {_controller.Action}");
                 break;
         }
     }

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using ToH.BLL;
 using ToH.Log;
 
@@ -9,7 +10,7 @@ public class HeroesListScreen : Screen
     private readonly IPrinter _printer;
     private readonly ILog _log;
 
-    private int cursorPosition = 0;
+    private int _cursorPosition;
 
     public HeroesListScreen(IHeroesController heroesController, IPrinter printer, ILog log)
     {
@@ -25,31 +26,32 @@ public class HeroesListScreen : Screen
 
     public override void Up(IUi ui)
     {
-        if (cursorPosition > 0)
+        if (_cursorPosition > 0)
         {
-            cursorPosition -= 1;
+            _cursorPosition -= 1;
         }
-        _log.Debug($"HeroesListScreen.Up: cursorPosition={cursorPosition}");
+        _log.LogDebug($"HeroesListScreen.Up: cursorPosition={_cursorPosition}");
         ShowHeroes();
     }
 
     public override void Down(IUi ui)
     {
-        if (_heroesController.GetAllHeroes().Count - 1 > cursorPosition)
+        if (_heroesController.GetAllHeroes().Count - 1 > _cursorPosition)
         {
-            cursorPosition += 1;
+            _cursorPosition += 1;
         }
-        _log.Debug($"HeroesListScreen.Down: cursorPosition={cursorPosition}");
+        _log.LogDebug($"HeroesListScreen.Down: cursorPosition={_cursorPosition}");
         ShowHeroes();
     }
 
     public override void Enter(IUi ui)
     {
-        _log.Info($"HeroesListScreen.Enter: Switching to HeroScreen for hero in cursorPosition {cursorPosition}");
-        var newScreen = ui.ScreenFactory.CreateScreen(typeof(HeroScreen), _heroesController.GetAllHeroes()[cursorPosition]);
+        _log.LogInfo($"HeroesListScreen.Enter: Switching to HeroScreen for hero in cursorPosition {_cursorPosition}");
+        Debug.Assert(ui != null, nameof(ui) + " != null");
+        var newScreen = ui.ScreenFactory.CreateScreen(typeof(HeroScreen), _heroesController.GetAllHeroes()[_cursorPosition]);
         if (newScreen != null)
         {
-            ui.Screen = newScreen;
+            ui.SetScreen(newScreen);
         }
     }
 
@@ -61,13 +63,13 @@ public class HeroesListScreen : Screen
     private void ShowHeroes()
     {
         var heroes = _heroesController.GetAllHeroes();
-        _log.Debug($"HeroesListScreen.ShowHeroes: Showing {heroes.Count} heroes.");
+        _log.LogDebug($"HeroesListScreen.ShowHeroes: Showing {heroes.Count} heroes.");
         _printer.Clear();
 
         _printer.PrintLine("   | Id | Name ");
         foreach (var (index, hero) in heroes.Select((value, i) => (i, value)))
         {
-            _printer.PrintLine($" {(index == cursorPosition ? "*" : " ")} | {hero.Id} | {hero.Name.ToUpper()}");
+            _printer.PrintLine($" {(index == _cursorPosition ? "*" : " ")} | {hero.Id} | {hero.Name.ToUpperInvariant()}");
         }
     } 
 

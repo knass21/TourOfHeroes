@@ -9,22 +9,24 @@ namespace ToH.Tests.Integration;
 
 public class DashboardScreenTest
 {
-    private ListPrinter _printer;
-    private DashboardScreen _uui;
-    private HeroesContainer db;
-    private HeroesController heroesController;
-    private SessionController sessionController;
+    private readonly ListPrinter _printer;
+    private readonly DashboardScreen _uui;
+    private readonly HeroesContainer _db;
+    private readonly HeroesController _heroesController;
+    private readonly SessionController _sessionController;
 
 
     public DashboardScreenTest()
     {
-        db = new HeroesContainer();
-        heroesController = new HeroesController(db);
-        sessionController = new SessionController();
-        sessionController.Username = "Test";
+        _db = new HeroesContainer();
+        _heroesController = new HeroesController(_db);
+        _sessionController = new SessionController
+        {
+            Username = "Test"
+        };
         _printer = new ListPrinter();
         var log = new Mock<ILog>();
-        _uui = new DashboardScreen(heroesController, sessionController, _printer, log.Object);
+        _uui = new DashboardScreen(_heroesController, _sessionController, _printer, log.Object);
     }
 
     [Fact]

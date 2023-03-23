@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using ToH.BLL;
 using ToH.Data;
 using ToH.Log;
@@ -10,7 +11,7 @@ public class DashboardScreen : Screen
     private readonly ISessionController _sessionController;
     private readonly IPrinter _printer;
     private readonly ILog _log;
-    private int cursorPosition = 0;
+    private int _cursorPosition;
 
     public DashboardScreen(IHeroesController heroesController, ISessionController sessionController, IPrinter printer, ILog log)
     {
@@ -26,53 +27,55 @@ public class DashboardScreen : Screen
     
     public override void Up(IUi ui)
     {
-        if (cursorPosition > 0)
+        if (_cursorPosition > 0)
         {
-            cursorPosition -= 1;
+            _cursorPosition -= 1;
         }
-        _log.Debug($"DashboardScreen.Up: cursorPosition={cursorPosition}");
+        _log.LogDebug($"DashboardScreen.Up: cursorPosition={_cursorPosition}");
         DrawDashboard();
     }
 
     public override void Down(IUi ui)
     {
-        if (_heroesController.GetAllHeroes().Count > cursorPosition)
+        if (_heroesController.GetAllHeroes().Count > _cursorPosition)
         {
-            cursorPosition += 1;
+            _cursorPosition += 1;
         }
-        _log.Debug($"DashboardScreen.Down: cursorPosition={cursorPosition}");
+        _log.LogDebug($"DashboardScreen.Down: cursorPosition={_cursorPosition}");
         DrawDashboard();
     }
 
     public override void Enter(IUi ui)
     {
-        if (cursorPosition == 0)
+        if (_cursorPosition == 0)
         {
-            _log.Info($"DashboardScreen.Enter: Switching to HeroesListScreen");
-            ui.Screen = ui.ScreenFactory.CreateScreen(typeof(HeroesListScreen));
+            _log.LogInfo($"DashboardScreen.Enter: Switching to HeroesListScreen");
+            Debug.Assert(ui != null, nameof(ui) + " != null");
+            ui.SetScreen(ui.ScreenFactory.CreateScreen(typeof(HeroesListScreen)));
         }
         else
         {
-            var heroIndex = cursorPosition - 1;
-            _log.Info($"DashboardScreen.Enter: Switching to HeroScreen for hero with index {heroIndex}");
+            var heroIndex = _cursorPosition - 1;
+            _log.LogInfo($"DashboardScreen.Enter: Switching to HeroScreen for hero with index {heroIndex}");
             // TODO how to go back to right place
-            ui.Screen = ui.ScreenFactory.CreateScreen(typeof(HeroScreen), _heroesController.GetDashboardHeroes()[heroIndex]);
+            Debug.Assert(ui != null, nameof(ui) + " != null");
+            ui.SetScreen(ui.ScreenFactory.CreateScreen(typeof(HeroScreen), _heroesController.GetDashboardHeroes()[heroIndex]));
         }
     }
     
     private void DrawDashboard()
     {
         var heroes = _heroesController.GetDashboardHeroes();
-        _log.Debug($"DashboardScreen.DrawDashboard: printing {heroes.Count} heroes");
+        _log.LogDebug($"DashboardScreen.DrawDashboard: printing {heroes.Count} heroes");
         _printer.Clear();
-        _printer.PrintLine($"Welcome: " + _sessionController.Username.ToUpper());        
+        _printer.PrintLine($"Welcome: " + _sessionController.Username.ToUpperInvariant());        
         _printer.PrintLine("+++++++++++++++++++++++++");
         _printer.PrintLine("   | GOTO Action / Hero ");
-        _printer.PrintLine($" {(0 == cursorPosition ? "*" : " ")} | Heroes list");
+        _printer.PrintLine($" {(0 == _cursorPosition ? "*" : " ")} | Heroes list");
         _printer.PrintLine("+++++++++++++++++++++++++");
         foreach (var (index, hero) in heroes.Select((value, i) => (i, value)))
         {
-            _printer.PrintLine($" {(index + 1 == cursorPosition ? "*" : " ")} | {hero.Name.ToUpper()}");
+            _printer.PrintLine($" {(index + 1 == _cursorPosition ? "*" : " ")} | {hero.Name.ToUpperInvariant()}");
         }
     }
 }

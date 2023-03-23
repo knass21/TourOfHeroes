@@ -13,11 +13,11 @@ namespace ToH.Tests.Screens;
 
 public class HeroesListScreenTest
 {
-    private HeroesListScreen uut;
-    private Mock<IPrinter> _printer;
-    private Mock<IUi> _ui;
-    private Mock<ILog> _log;
-    private Mock<IHeroesController> _heroesController;
+    private readonly HeroesListScreen _uut;
+    private readonly Mock<IPrinter> _printer;
+    private readonly Mock<IUi> _ui;
+    private readonly Mock<ILog> _log;
+    private readonly Mock<IHeroesController> _heroesController;
 
     public HeroesListScreenTest()
     {
@@ -25,7 +25,7 @@ public class HeroesListScreenTest
         _printer = new Mock<IPrinter>(MockBehavior.Strict);
         _ui = new Mock<IUi>();
         _log = new Mock<ILog>();
-        uut = new HeroesListScreen(_heroesController.Object, _printer.Object, _log.Object);
+        _uut = new HeroesListScreen(_heroesController.Object, _printer.Object, _log.Object);
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public class HeroesListScreenTest
         _printer.Setup(p => p.PrintLine(It.IsAny<string>()));
 
         // Act
-        uut.None(_ui.Object);
+        _uut.None(_ui.Object);
 
         // Assert
         _printer.Verify(printer => printer.PrintLine(
@@ -58,15 +58,15 @@ public class HeroesListScreenTest
         });
         var seq = new MockSequence();
         _printer.Setup(p => p.Clear());
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains("*"))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains('*'))));
 
         // Act
-        uut.None(_ui.Object);
+        _uut.None(_ui.Object);
 
         // Assert
-        _printer.Verify(p => p.PrintLine(It.Is<string>(s => s.Contains("*"))), Times.Once);
-        _printer.Verify(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))), Times.Once);
+        _printer.Verify(p => p.PrintLine(It.Is<string>(s => s.Contains('*'))), Times.Once);
+        _printer.Verify(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))), Times.Once);
     }
     
     [Fact]
@@ -79,15 +79,15 @@ public class HeroesListScreenTest
         });
         var seq = new MockSequence();
         _printer.Setup(p => p.Clear());
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains("*"))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains('*'))));
 
         // Act
-        uut.Down(_ui.Object);
+        _uut.Down(_ui.Object);
 
         // Assert
-        _printer.Verify(p => p.PrintLine(It.Is<string>(s => s.Contains("*"))), Times.Once);
-        _printer.Verify(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))), Times.Once);
+        _printer.Verify(p => p.PrintLine(It.Is<string>(s => s.Contains('*'))), Times.Once);
+        _printer.Verify(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))), Times.Once);
     }
     
     [Fact]
@@ -100,15 +100,15 @@ public class HeroesListScreenTest
         });
         var seq = new MockSequence();
         _printer.Setup(p => p.Clear());
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains("*"))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains('*'))));
 
         // Act
-        uut.Up(_ui.Object);
+        _uut.Up(_ui.Object);
 
         // Assert
-        _printer.Verify(p => p.PrintLine(It.Is<string>(s => s.Contains("*"))), Times.Once);
-        _printer.Verify(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))), Times.Once);
+        _printer.Verify(p => p.PrintLine(It.Is<string>(s => s.Contains('*'))), Times.Once);
+        _printer.Verify(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))), Times.Once);
     }
     
     [Fact]
@@ -122,16 +122,16 @@ public class HeroesListScreenTest
         });
         var seq = new MockSequence();
         _printer.Setup(p => p.Clear());
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))));
 
         // Act
-        uut.None(_ui.Object);
+        _uut.None(_ui.Object);
 
         // Assert
-        _printer.Verify(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))), Times.Exactly(2));
-        _printer.Verify(p => p.PrintLine(It.Is<string>(s => s.Contains("*"))), Times.Once);
+        _printer.Verify(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))), Times.Exactly(2));
+        _printer.Verify(p => p.PrintLine(It.Is<string>(s => s.Contains('*'))), Times.Once);
     }
 
     [Fact]
@@ -146,7 +146,7 @@ public class HeroesListScreenTest
         _printer.Setup(p => p.PrintLine(It.IsAny<string>()));
 
         // Act
-        uut.None(_ui.Object);
+        _uut.None(_ui.Object);
         
         // Assert
         _printer.Verify(printer => printer.PrintLine(
@@ -165,16 +165,16 @@ public class HeroesListScreenTest
         });
         var seq = new MockSequence();
         _printer.Setup(p => p.Clear());
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains("*"))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains('*'))));
 
         // Act
-        uut.Down(_ui.Object);
+        _uut.Down(_ui.Object);
 
         // Assert
-        _printer.Verify(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))), Times.Exactly(2));
-        _printer.Verify(p => p.PrintLine(It.Is<string>(s => s.Contains("*"))), Times.Once);
+        _printer.Verify(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))), Times.Exactly(2));
+        _printer.Verify(p => p.PrintLine(It.Is<string>(s => s.Contains('*'))), Times.Once);
     }
     
     [Fact]
@@ -188,20 +188,20 @@ public class HeroesListScreenTest
         });
         var seq = new MockSequence();
         _printer.Setup(p => p.Clear());
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains("*"))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains('*'))));
 
         // Act
-        uut.Down(_ui.Object);
-        uut.Down(_ui.Object);
+        _uut.Down(_ui.Object);
+        _uut.Down(_ui.Object);
 
         // Assert
-        _printer.Verify(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))), Times.Exactly(4));
-        _printer.Verify(p => p.PrintLine(It.Is<string>(s => s.Contains("*"))), Times.Exactly(2));
+        _printer.Verify(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))), Times.Exactly(4));
+        _printer.Verify(p => p.PrintLine(It.Is<string>(s => s.Contains('*'))), Times.Exactly(2));
     }
     
     [Fact]
@@ -215,20 +215,20 @@ public class HeroesListScreenTest
         });
         var seq = new MockSequence();
         _printer.Setup(p => p.Clear());
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains("*"))));
-        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => s.Contains('*'))));
+        _printer.InSequence(seq).Setup(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))));
 
         // Act
-        uut.Down(_ui.Object);
-        uut.Up(_ui.Object);
+        _uut.Down(_ui.Object);
+        _uut.Up(_ui.Object);
 
         // Assert
-        _printer.Verify(p => p.PrintLine(It.Is<string>(s => !s.Contains("*"))), Times.Exactly(4));
-        _printer.Verify(p => p.PrintLine(It.Is<string>(s => s.Contains("*"))), Times.Exactly(2));
+        _printer.Verify(p => p.PrintLine(It.Is<string>(s => !s.Contains('*'))), Times.Exactly(4));
+        _printer.Verify(p => p.PrintLine(It.Is<string>(s => s.Contains('*'))), Times.Exactly(2));
     }
 
     [Fact]
@@ -250,10 +250,10 @@ public class HeroesListScreenTest
         _ui.Setup(ui => ui.ScreenFactory).Returns(screenFactory.Object);
         
         // Act
-        uut.Enter(_ui.Object);
+        _uut.Enter(_ui.Object);
         
         // Assert
-        _ui.VerifySet(ui => ui.Screen=It.Is<HeroScreen>(hs => hs == heroScreen));
+        _ui.VerifySet(ui => ui.SetScreen(It.Is<HeroScreen>(hs => hs == heroScreen)));
     }
 
 }

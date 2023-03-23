@@ -1,9 +1,11 @@
 using ToH.PL.Screens;
 
-namespace ToH.PL;
-
-public interface IUi
+namespace ToH.PL
 {
-    Screen? Screen { set; }
-    IScreenFactory ScreenFactory { get; }
+    public interface IUi
+    {
+        void SetScreen(Screen? value);
+
+        IScreenFactory ScreenFactory { get; }
+    }
 }

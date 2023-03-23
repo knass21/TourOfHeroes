@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using ToH.BLL;
 using ToH.Log;
 
@@ -22,17 +23,18 @@ public class LoginScreen : Screen
         _printer.PrintLine("Write username:");
     }
 
-    public override void Text(IUi ui, string username)
+    public override void Text(IUi ui, string controllerValue)
     {
-        if (string.IsNullOrEmpty(username))
+        if (string.IsNullOrEmpty(controllerValue))
         {
             Init();
         }
         else
         {
-            _controller.Username = username;
-            _log.Info($"LoginScreen.Text: Switching to DashboardScreen with username {username}");
-            ui.Screen = ui.ScreenFactory.CreateScreen(typeof(DashboardScreen));
+            _controller.Username = controllerValue;
+            _log.LogInfo($"LoginScreen.Text: Switching to DashboardScreen with username {controllerValue}");
+            Debug.Assert(ui != null, nameof(ui) + " != null");
+            ui.SetScreen(ui.ScreenFactory.CreateScreen(typeof(DashboardScreen)));
         }
     }
 }

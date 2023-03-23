@@ -1,15 +1,17 @@
 namespace ToH.Log;
 
-public class FileLog : ILog
+public class FileLog : ILog, IDisposable
 {
-    private StreamWriter _file;
+    private readonly StreamWriter _file;
 
     public FileLog(string filepath, bool append)
     {
-        _file = new StreamWriter(filepath, append);
-        _file.AutoFlush= true;
+        _file = new StreamWriter(filepath, append)
+        {
+            AutoFlush = true
+        };
 
-        Info("Logger initialized.");
+        LogInfo("Logger initialized.");
     }
 
     private void Log(string level, string line)
@@ -17,23 +19,37 @@ public class FileLog : ILog
         _file.WriteLine($"{DateTime.Now} - {level} - {line}");
     }
 
-    public void Debug(string line)
+    public void LogDebug(string line)
     {
         Log("DEBUG", line);
     }
 
-    public void Error(string line)
+    public void LogError(string line)
     {
         Log("ERROR", line);
     }
 
-    public void Info(string line)
+    public void LogInfo(string line)
     {
         Log("INFO", line);
     }
 
-    public void Warn(string line)
+    public void LogWarn(string line)
     {
         Log("WARN", line);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _file.Dispose();
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }
